@@ -1,0 +1,56 @@
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {service-basename}-root
+  namespace: kube-ingress
+  labels:
+    app: {service-basename}
+    kubernetes.io/cluster-service: "true"
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-secret: "{service-namespace}/{service-basename}-tls-client-ca"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+
+      set $redirect_always "";
+    
+      # redirect to the qualified path "/qualifier/" for a qualified ingress, which in turn uses a qualified service
+      # - a qualified path is specified in a **qualified** ingress specification (f.i. my-ingress-r1, as opposed to my-ingress)
+      # - a qualified service is specified in a **qualified** service specification (f.i. my-service-r1, as opposed to my-service)
+      #
+      # qualifiers:
+      # - are delimited by a "/" - an uri like "/qualifier" must be redirected to the qualified path using uri "/qualifier/"
+      #                          - an uri like "/qualifier/" must not be redirected to avoid endless loops when the path "/qualifier/" is not defined
+      # - cannot contain a "."   - an uri like "/config.json" must be redirected to the default path using uri "/-/config.json"
+      # - cannot contain a "#"   - an uri like "/document#fragment" must be redirected to the default path using uri "/-/document#fragment"
+      # - cannot contain a "?"   - an uri like "/resource?query" must be redirected to the default path using uri "/-/resource?query"
+      if ( $uri ~* ^/([^/\.#?]+)$ ) {
+          set $redirect_always "$scheme://$best_http_host/$1/";
+      }
+      
+      # redirect to the default path "/-/" for the default service-qualifier "-"
+      # - the default path is specified in the **unqualified* ingress specification (f.i. my-ingress, as opposed to my-ingress-r1)
+      # - the default service is specified in the **unqualified** service specification (f.i. my-service, as opposed to my-service-r1)
+      if ( $redirect_always = "" ) {
+          set $redirect_always "$scheme://$best_http_host/-$uri";
+      }
+      
+spec:
+  tls:
+  - 
+    hosts:
+    - {server}.{cluster}.localdomain
+    secretName: {service-basename}-root-tls-server-certs
+  rules:
+  - 
+    host: {server}.{cluster}.localdomain
+    http:
+      paths:
+      - 
+        path: /
+        backend:
+          serviceName: kube-ingress-nginx-default-backend   # never used 
+          servicePort: http

@@ -1,0 +1,1 @@
+start "API Proxy" cmd /C "kubectl --kubeconfig=%HOMEDRIVE%%HOMEPATH%\.kube\beth@kubernetes.development.conf --port=58001 proxy & pause"

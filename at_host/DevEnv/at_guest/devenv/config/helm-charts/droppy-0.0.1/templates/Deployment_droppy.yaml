@@ -1,0 +1,80 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "droppy.fullname" . }}
+  labels:
+    app: {{ template "droppy.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "droppy.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      initContainers:
+      -
+        name: {{ template "droppy.fullname" . }}-init
+        image: busybox:1.28
+        command: ['sh', '-c', 'cp /config-map/config.json /config/ && echo "[initContainer] configMap copied"']
+        volumeMounts:
+        - 
+          name: config-map
+          mountPath: /config-map
+        - 
+          name: config
+          mountPath: /config
+      containers:
+      - 
+        name: {{ template "droppy.fullname" . }}
+        image: silverwind/droppy
+        imagePullPolicy: IfNotPresent
+        env:
+        - 
+          name: GID
+          value: "{{ .Values.securityContext.fsGroup }}"
+        - 
+          name: UID
+          value: "{{ .Values.securityContext.runAsUser }}"
+        ports:
+        #- 
+        #  name: http
+        #  containerPort: 8989
+        #  protocol: TCP
+        - 
+          name: https
+          containerPort: 1443
+          protocol: TCP
+        volumeMounts:
+        - 
+          name: config
+          mountPath: /config
+        - 
+          name: files
+          mountPath: /files
+        - 
+          name: certs
+          mountPath: /certs
+      restartPolicy: Always
+      volumes:
+      - 
+        name: config-map
+        
+        configMap:
+          name: {{ template "droppy.fullname" . }}
+      - 
+        name: config
+        emptyDir: {}
+      - 
+        name: files
+        persistentVolumeClaim:
+          claimName: {{ template "droppy.fullname" . }}
+      - 
+        name: certs
+        secret:
+          secretName: {{ .Values.tlsSecretName }}

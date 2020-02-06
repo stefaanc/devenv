@@ -1,0 +1,31 @@
+{{- $fullName := .Release.Name -}}
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ $fullName }}-mongo1
+spec:
+  selector:
+    matchLabels:
+      app: mongo1
+      role: master
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo1
+        role: master
+        tier: backend
+    spec:
+      containers:
+        - name: mongo1
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: data
+              mountPath: /data/db
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ $fullName }}-mongo-pv-claim

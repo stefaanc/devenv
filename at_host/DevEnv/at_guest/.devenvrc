@@ -1,0 +1,15 @@
+# .devenvrc
+
+if [ -f /usr/bin/kubectl ]; then
+    . <(kubectl completion bash)
+fi
+if [ -f ~/.kube/profile ] ; then
+    . ~/.kube/profile
+fi
+
+if [ -f /usr/local/bin/helm ] ; then
+    . <(helm completion bash)
+fi
+if [ -f ~/.helm/profile ] ; then
+    . ~/.helm/profile
+fi

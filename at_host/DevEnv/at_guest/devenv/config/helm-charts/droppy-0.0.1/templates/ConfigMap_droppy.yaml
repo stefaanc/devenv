@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "droppy.fullname" . }}
+  labels:
+    app: {{ template "droppy.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  config.json: '{
+        "listeners": [
+            {
+                "host": [
+                    "0.0.0.0",
+                    "::"
+                ],
+                "port": 1443,
+                "protocol": "https",
+                "key": "/certs/tls.key",
+                "cert": "/certs/tls.crt",
+                "hsts": 31536000
+            }
+        ],
+        "public": false,
+        "timestamps": true,
+        "linkLength": 5,
+        "linkExtensions": true,
+        "logLevel": 3,
+        "maxFileSize": 0,
+        "updateInterval": 1000,
+        "pollingInterval": 0,
+        "keepAlive": 20000,
+        "allowFrame": false,
+        "readOnly": false,
+        "compression": true,
+        "ignorePatterns": [],
+        "watch": true
+    }'

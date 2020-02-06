@@ -1,0 +1,20 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-tiller
+  namespace: kube-apps
+  labels:
+    app: kube-tiller
+spec:
+  type: ClusterIP
+  ports:
+  - 
+    name: tiller
+    protocol: TCP
+    port: 44134
+    targetPort: tiller
+  selector:
+    app: helm
+    name: tiller

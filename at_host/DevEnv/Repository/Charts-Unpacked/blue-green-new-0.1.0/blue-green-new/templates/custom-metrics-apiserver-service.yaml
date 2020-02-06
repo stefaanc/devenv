@@ -1,0 +1,12 @@
+{{- $fullName := .Release.Name -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-custom-metrics-apiserver
+  namespace: monitoring
+spec:
+  ports:
+  - port: 443
+    targetPort: 6443
+  selector:
+    app: custom-metrics-apiserver

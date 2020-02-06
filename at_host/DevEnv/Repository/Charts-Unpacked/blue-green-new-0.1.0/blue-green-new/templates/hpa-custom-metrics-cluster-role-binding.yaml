@@ -1,0 +1,13 @@
+{{- $fullName := .Release.Name -}}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ $fullName }}-hpa-controller-custom-metrics
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ $fullName }}-custom-metrics-server-resources
+subjects:
+- kind: ServiceAccount
+  name: {{ $fullName }}-horizontal-pod-autoscaler
+  namespace: kube-system

@@ -1,0 +1,18 @@
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-depot
+  labels:
+    app: nfs-depot
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 40Gi
+  storageClassName: nfs-depot
+  nfs:
+    server: repo0
+    path: /var/nfs/depot
+

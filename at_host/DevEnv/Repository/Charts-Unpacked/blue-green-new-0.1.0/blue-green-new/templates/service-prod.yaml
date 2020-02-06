@@ -1,0 +1,23 @@
+{{- $fullName := .Release.Name -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $fullName }}-service-prod
+  namespace: ingress-nginx
+  labels:
+    app: {{ template "blue-green.name" . }}
+    chart: {{ template "blue-green.chart" . }}
+    release: {{ .Release.Name }}
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+      name: http
+  externalIPs:
+    - 192.168.1.104
+  selector:
+    app: {{ template "blue-green.name" . }}
+    release: {{ .Release.Name }}
+    slot: {{ .Values.productionSlot }}

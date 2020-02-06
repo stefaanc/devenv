@@ -1,0 +1,9 @@
+apiVersion: v1
+appVersion: 10.1.0
+description: A Helm Chart for droppy
+home: https://github.com/silverwind/droppy
+icon: https://camo.githubusercontent.com/abce96075e1d9ffb897a243c09f320d99d0309d7/68747470733a2f2f63646e2e7261776769742e636f6d2f73696c76657277696e642f64726f7070792f6d61737465722f636c69656e742f696d616765732f726561646d652d6c6f676f2e737667
+keywords:
+- droppy
+name: droppy
+version: 0.0.1

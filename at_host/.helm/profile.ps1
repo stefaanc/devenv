@@ -1,0 +1,5 @@
+$env:HELM_TLS_VERIFY="true"
+$env:HELM_TLS_CA_CERT="C:\Users\stefaanc\.certs\beth\ca@kube-tiller.development.crt"
+$env:HELM_TLS_CERT="C:\Users\stefaanc\.certs\beth\beth@kube-tiller.development.crt"
+$env:HELM_TLS_KEY="C:\Users\stefaanc\.certs\beth\beth@kube-tiller.development.key"
+$env:TILLER_NAMESPACE="kube-apps"

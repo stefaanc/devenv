@@ -1,0 +1,22 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-ingress-nginx-default-backend
+  namespace: kube-ingress
+  labels:
+    app: kube-ingress-nginx
+    component: default-backend
+spec:
+  type: ClusterIP
+  ports:
+  - 
+    name: http
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: kube-ingress-nginx
+    component: default-backend
+    release: kube-ingress-nginx-r1

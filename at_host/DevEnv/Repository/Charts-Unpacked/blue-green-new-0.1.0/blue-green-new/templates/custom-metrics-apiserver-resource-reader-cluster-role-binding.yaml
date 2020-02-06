@@ -1,0 +1,14 @@
+{{- $fullName := .Release.Name -}}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ $fullName }}-custom-metrics-resource-reader
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+#  name: {{ $fullName }}-custom-metrics-resource-reader
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: {{ $fullName }}-custom-metrics-apiserver
+  namespace: monitoring

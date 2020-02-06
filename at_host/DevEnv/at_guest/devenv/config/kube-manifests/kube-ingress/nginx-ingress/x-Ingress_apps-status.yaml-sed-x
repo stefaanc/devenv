@@ -1,0 +1,31 @@
+---
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: apps-status
+  namespace: kube-ingress
+  labels:
+    app: kube-ingress-nginx
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /nginx_status
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+    nginx.ingress.kubernetes.io/auth-tls-secret: "kube-ingress/apps-tls-server-certs"
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "1"
+spec:
+  tls:
+  - 
+    hosts:
+    - apps.{clustername}.localdomain
+    secretName: apps-tls-server-certs
+  rules:
+  - 
+    host: apps.{clustername}.localdomain
+    http:
+      paths:
+      - 
+        path: /status/
+        backend:
+          serviceName: kube-ingress-nginx-r1-controller-stats
+          servicePort: stats

@@ -1,0 +1,10 @@
+# .devenv_init
+
+echo "#"
+echo "# Initialize VM"
+echo "#"
+
+mkdir /root/devenv/dvd
+mount /dev/sr1 /root/devenv/dvd
+/root/devenv/scripts/complete-restore-devenv.sh
+echo ""

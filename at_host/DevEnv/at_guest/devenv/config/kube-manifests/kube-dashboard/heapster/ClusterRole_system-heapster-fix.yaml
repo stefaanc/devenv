@@ -1,0 +1,13 @@
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: system-heapster-fix
+  labels:
+    app: kube-heapster
+rules:
+- 
+  apiGroups: [""]
+  resources: ["nodes/stats"]
+  verbs: ["get"]

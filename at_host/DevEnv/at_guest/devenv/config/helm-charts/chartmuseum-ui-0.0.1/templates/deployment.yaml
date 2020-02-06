@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "chartmuseum-ui.fullname" . }}
+  labels:
+    app: {{ template "chartmuseum-ui.name" . }}
+    chart: {{ template "chartmuseum-ui.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "chartmuseum-ui.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "chartmuseum-ui.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - 
+        name: {{ .Chart.Name }}
+        image: "idobry/chartmuseumui:latest"
+        imagePullPolicy: IfNotPresent
+        env:
+        - 
+          name: CHART_MUSESUM_URL
+          value: {{ .Values.deployment.chartmuseumurl }}
+        - 
+          name: BASIC_AUTH_USERS
+          value: '[{"username":"admin", "password":"password"}, {"username":"user", "password":"s3cr3t"}]'
+        ports:
+        - 
+          name: http
+          containerPort: 8080
+          protocol: TCP
+        resources: {}
+      restartPolicy: Always
