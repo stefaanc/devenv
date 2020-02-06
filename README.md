@@ -8,6 +8,6 @@ Before you start,
 - the folders `at_home` and `at_guest` need to be renamed to `@host` and `@guest` for the scripts to run.  We had to rename these because they create problems with uploading to Github.
 - remark that most documentation are linking html files - they intended to be read after installing the package on your laptop, not to be read on Github.
 
-To learn more about the DevEnv environment, read [README](@host/DevEnv/README.md).
+To learn more about the DevEnv environment, read [README](at_host/DevEnv/README.md).
 
-To install the DevEnv environment on your laptop, start with [Install DevEnv Package](@host/DevEnv/Documentation/prepare-development-environment.md), and then follow the `$HOME\DevEnv\README`.
+To install the DevEnv environment on your laptop, start with [Install DevEnv Package](at_host/DevEnv/Documentation/prepare-development-environment.md), and then follow the `$HOME\DevEnv\README`.
