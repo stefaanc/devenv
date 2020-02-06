@@ -1,5 +1,4 @@
 # Development Environment
----
 
 This document describes the creation and installation of the development environment.
 It is intended to run on a laptop with Windows 10 installed and Hyper-V running.
